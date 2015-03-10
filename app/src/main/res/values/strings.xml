@@ -1,0 +1,70 @@
+<resources>
+    <string name="app_name">My Tasks</string>
+
+    <!-- HOME PAGE STRINGS -->
+    <string name="btnAddTask">Add Task!</string>
+    <string name="action_settings">Settings</string>
+    <string name="txtTaskList">My Tasks</string>
+    <string name="removedTask">The task has been correctly removed from the calendar.</string>
+    <string name="removeAlert">Removing Task!</string>
+    <string name="deleteMessage">You are about to delete the event, do you confirm?</string>
+    <string name="confirm">Yes</string>
+    <string name="cancel">No</string>
+    <string name="homepage_name">Home Page</string>
+    <string name="contextMenu_title">Task Options</string>
+    <string name="contextMenu_edit">Edit Task</string>
+    <string name="contextMenu_delete">Delete Task</string>
+
+    <!-- TASKLIST_ITEM -->
+    <string name="txtTaskListName">Task Name</string>
+    <string name="txtTaskListDate">Task Date</string>
+    <string name="txtTaskListTime">Task Time</string>
+
+    <!-- ADD TASK STRINGS -->
+    <string name="txtTaskName">Task Name</string>
+    <string name="txtTaskDate">Task Date</string>
+    <string name="txtTaskTime">Task Time</string>
+    <string name="btnCreateTask">Create New Task</string>
+    <string name="btnTaskList">Task List</string>
+    <string name="incompleteData">Missing Data!</string>
+    <string name="errorMessage">You have to fill all the fields</string>
+    <string name="addedTask">The task has been correctly added to the calendar.</string>
+    <string name="alreadyExists"> already exists. Please use a different name.</string>
+    <string name="addtasks_name">Add Tasks</string>
+
+    <!-- DATE PICKER DIALOG FRAGMENT -->
+    <string name="txtDPTitle">Select the date of your task</string>
+    <string name="btnDPValidate">Select</string>
+    <string name="ErrorDPMessage">" must implement OnDatePickedListener"</string>
+
+    <!-- TIME PICKER DIALOG FRAGMENT -->
+    <string name="txtTPTitle">Select the time of your task</string>
+    <string name="btnTPValidate">Select</string>
+
+    <!-- TAG ITEMS -->
+    <item type="id" name="taskId"> </item>
+    <item type="id" name="position"> </item>
+
+    <!-- EDIT TASK STRINGS -->
+    <string name="editDialogName">Update Task Details</string>
+    <string name="btnUpdateTask">Update Task Details</string>
+    <string name="updatedTask">The task has been correctly updated.</string>
+    <string name="edittasks_name">Edit Tasks</string>
+
+    <!-- REMINDERS SETTINGS STRINGS -->
+    <string name="reminderssettings_name">Reminders Settings</string>
+    <string name="reminders_description">Reminders Description</string>
+    <string name="reminders_minute">M</string>
+    <string name="reminders_hour">H</string>
+    <string name="duration">Duration : </string>
+    <string name="reminders_min_text"> Min</string>
+    <string name="reminders_hr_text"> Hr</string>
+    <string name="reminders_number">Number of reminder(s) :</string>
+    <string name="blocked_reminder">The first reminder can\'t be modified nor inactivated.</string>
+    <string-array name="spinnerReminders">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+</resources>

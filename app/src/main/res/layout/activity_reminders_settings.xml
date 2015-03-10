@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/reminders_number"
+        android:id="@+id/txtRemNumber"
+        android:layout_alignParentStart="true"
+        android:gravity="center"
+        android:layout_marginLeft="15dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="25dp" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinReminder"
+        android:entries="@array/spinnerReminders"
+        android:textAlignment="center"
+        android:layout_alignTop="@+id/txtRemNumber"
+        android:layout_toEndOf="@+id/txtRemNumber"
+        android:layout_marginRight="15dp"
+        android:layout_toRightOf="@+id/txtRemNumber"
+        android:layout_above="@+id/listViewReminders"
+        android:gravity="center" />
+
+    <ListView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/listViewReminders"
+        android:layout_below="@+id/txtRemNumber"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="75dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/button"
+        android:onClick="gotToHomePage"
+        android:layout_marginRight="25dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="0dp" />
+</RelativeLayout>
