@@ -14,6 +14,8 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.sql.SQLException;
@@ -32,6 +34,8 @@ public class EditTask extends ActionBarActivity implements DatePFragment.OnDateP
     private EditText txtEditDate;
     private EditText txtEditTime;
     private Button btnEditTask;
+    private SeekBar seekBarEditFreq;
+    private TextView txtEditFreqDisplay;
 
     private String taskName;
     private int taskyear;
@@ -51,42 +55,13 @@ public class EditTask extends ActionBarActivity implements DatePFragment.OnDateP
     FragmentManager fm = getSupportFragmentManager();
 
     private DatabaseTaskHandler dbHandler;
+    private int frequency;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_task);
-
-        Intent intent = getIntent();
-
-        txtEditName = (EditText) findViewById(R.id.txtEditName);
-        txtEditName.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        txtEditDate = (EditText) findViewById(R.id.txtEditDate);
-        txtEditTime = (EditText) findViewById(R.id.txtEditTime);
-        btnEditTask = (Button) findViewById(R.id.btnUpdateTask);
-
-        cal = Calendar.getInstance();
-        // The context of the dialog Fragment is getActivity()
-        dbHandler = new DatabaseTaskHandler(getApplicationContext());
-        try {
-            dbHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        int taskId = intent.getExtras().getInt("taskId");
-        taskToEdit = dbHandler.getTask(taskId);
-
-        // This prevent from having to tap twice to get the related onClick activity
-        txtEditDate.setFocusable(false);
-        txtEditTime.setFocusable(false);
-
-
-
-        // Init the Task data to be edited.
-        txtEditName.setText(taskToEdit.getTitle());
-        txtEditDate.setText(taskToEdit.getDate());
-        txtEditTime.setText(taskToEdit.getTime());
+        initVariables();
 
         txtEditDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +84,83 @@ public class EditTask extends ActionBarActivity implements DatePFragment.OnDateP
                 showTimePickerDialog(v.getId());
             }
         });
+
+        seekBarEditFreq.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                frequency = progress;
+                changeFreqDisplay(frequency);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+    }
+
+    // TODO: to be completed
+    public void initVariables() {
+
+        // The context of the dialog Fragment is getActivity()
+        dbHandler = new DatabaseTaskHandler(getApplicationContext());
+        try {
+            dbHandler.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        Intent intent = getIntent();
+        int taskId = intent.getExtras().getInt("taskId");
+        taskToEdit = dbHandler.getTask(taskId);
+
+        txtEditName = (EditText) findViewById(R.id.txtEditName);
+        txtEditName.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        txtEditDate = (EditText) findViewById(R.id.txtEditDate);
+        txtEditTime = (EditText) findViewById(R.id.txtEditTime);
+        btnEditTask = (Button) findViewById(R.id.btnUpdateTask);
+        seekBarEditFreq = (SeekBar) findViewById(R.id.seekBarEditFreq);
+        txtEditFreqDisplay = (TextView) findViewById(R.id.txtEditFreqDisp);
+
+        // This prevent from having to tap twice to get the related onClick activity
+        txtEditDate.setFocusable(false);
+        txtEditTime.setFocusable(false);
+
+        cal = Calendar.getInstance();
+
+        // Init the Task data to be edited.
+        txtEditName.setText(taskToEdit.getTitle());
+        txtEditDate.setText(taskToEdit.getDate());
+        txtEditTime.setText(taskToEdit.getTime());
+        frequency = taskToEdit.getFrequency();
+        seekBarEditFreq.setProgress(frequency);
+        changeFreqDisplay(frequency);
+
+    }
+
+    private void changeFreqDisplay(int freq) {
+        switch (freq) {
+            case 0:
+                txtEditFreqDisplay.setText(R.string.freqNone);
+                break;
+            case 1:
+                txtEditFreqDisplay.setText(R.string.freqDaily);
+                break;
+            case 2:
+                txtEditFreqDisplay.setText(R.string.freqWeekly);
+                break;
+            case 3:
+                txtEditFreqDisplay.setText(R.string.freqMonthly);
+                break;
+            case 4:
+                txtEditFreqDisplay.setText(R.string.freqYearly);
+                break;
+        }
     }
 
     public void showDatePickerDialog(int layoutId) {
@@ -177,6 +229,7 @@ public class EditTask extends ActionBarActivity implements DatePFragment.OnDateP
             // Once the UpdateTask button is clicked, update of the Task object to fulfill the given items and modify the task into the calendar.
             taskName = txtEditName.getText().toString();
             taskToEdit.setTitle(taskName);
+            taskToEdit.setFrequency(frequency);
 
             // Update the task event and reminder into the calendar.
             taskToEdit.updateEvent(getApplicationContext());

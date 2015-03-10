@@ -50,18 +50,7 @@ public class RemindersSettings extends ActionBarActivity implements TimePFragmen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminders_settings);
-
-        cal = Calendar.getInstance();
-        dbRemHandler = new DatabaseReminderHandler(getApplicationContext());
-        try {
-            dbRemHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        remindersListView = (ListView) findViewById(R.id.listViewReminders);
-
-        registerForContextMenu(remindersListView);
+        initVariables();
 
         remindersListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -71,9 +60,6 @@ public class RemindersSettings extends ActionBarActivity implements TimePFragmen
                 return false;
             }
         });
-
-        reminderSpinner = (Spinner) findViewById(R.id.spinReminder);
-        reminderSpinner.setSelection(dbRemHandler.getActiveReminders()-1);
 
         reminderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -92,6 +78,26 @@ public class RemindersSettings extends ActionBarActivity implements TimePFragmen
         }
 
         populateRemindersList();
+    }
+
+    private void initVariables(){
+
+        // DatabaseHandlers initialization
+        dbRemHandler = new DatabaseReminderHandler(getApplicationContext());
+        try {
+            dbRemHandler.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // Association of displayed items
+        remindersListView = (ListView) findViewById(R.id.listViewReminders);
+        reminderSpinner = (Spinner) findViewById(R.id.spinReminder);
+
+        // Initialization of variables
+        registerForContextMenu(remindersListView);
+        cal = Calendar.getInstance();
+        reminderSpinner.setSelection(dbRemHandler.getActiveReminders()-1);
     }
 
     // To define which reminders are displayed depending on the number selected with the spinner.

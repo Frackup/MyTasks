@@ -48,6 +48,27 @@ public class HomePage extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
+        initVariables();
+
+        // The following piece of code allows to empty database before testing when reinstalling the app for test.
+        //getApplicationContext().deleteDatabase("myTasks");
+
+        taskListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                longClickedItemIndex = position;
+                return false;
+            }
+        });
+
+        if (dbHandler.getTasksCount() != 0)
+            Tasks.addAll(dbHandler.getAllTasks());
+
+        populateTasksList();
+        loaded = true;
+    }
+
+    public void initVariables() {
 
         dbAdapter = new DatabaseAdapter(this);
         dbAdapter.open();
@@ -65,26 +86,10 @@ public class HomePage extends ActionBarActivity {
             e.printStackTrace();
         }
         dbRemHandler.initReminders();
+
         taskListView = (ListView) findViewById(R.id.listViewTasks);
-
-        // The following piece of code allows to empty database before testing when reinstalling the app for test.
-        //getApplicationContext().deleteDatabase("myTasks");
-
         registerForContextMenu(taskListView);
 
-        taskListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                longClickedItemIndex = position;
-                return false;
-            }
-        });
-
-        if (dbHandler.getTasksCount() != 0)
-            Tasks.addAll(dbHandler.getAllTasks());
-
-        populateTasksList();
-        loaded = true;
     }
 
 

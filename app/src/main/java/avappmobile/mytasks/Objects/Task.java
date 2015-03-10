@@ -35,10 +35,11 @@ public class Task {
     private int _hour;
     private int _minute;
     private long _eventId;
+    private int _frequency;
 
     private static final String CALENDAR_URI_BASE = "content://com.android.calendar/";
 
-    public Task (int id, String title, int year, int month, int day, int hour, int minute, String date, String time, long eventId){
+    public Task (int id, String title, int year, int month, int day, int hour, int minute, String date, String time, long eventId, int frequency){
         _id = id;
         _title = title;
         _year = year;
@@ -49,6 +50,7 @@ public class Task {
         _date = date;
         _time = time;
         _eventId = eventId;
+        _frequency = frequency;
     }
 
     public int getId() { return _id; }
@@ -81,6 +83,9 @@ public class Task {
 
     public long getEventId() { return _eventId; }
 
+    public int getFrequency() { return _frequency; }
+    public void setFrequency(int frequency) { this._frequency = frequency; }
+
     // Add an event to the calendar of the user.
     public void addEvent(Context context) {
 
@@ -92,14 +97,27 @@ public class Task {
             dbRemHandler = new DatabaseReminderHandler(context);
             dbRemHandler.open();
 
+            String freq = defineFrequency();
+
             ContentResolver cr = context.getContentResolver();
             ContentValues values = new ContentValues();
             values.put(CalendarContract.Events.DTSTART, calDate.getTimeInMillis());
-            values.put(CalendarContract.Events.DTEND, calDate.getTimeInMillis()+60*60*500);
             values.put(CalendarContract.Events.TITLE, this._title);
             values.put(CalendarContract.Events.CALENDAR_ID, 1);
             values.put(CalendarContract.Events.EVENT_TIMEZONE, Calendar.getInstance()
                     .getTimeZone().getID());
+
+
+            // TODO: Implement the RFC2445 format when using duration (it's a text format)
+            // If a frequency has been selected, add it to the calendar
+            if (freq != "") {
+                values.put(CalendarContract.Events.RRULE, freq);
+                long durationSeconds = 60*30;
+                values.put(CalendarContract.Events.DURATION, "P" + durationSeconds + "S"); // RFC2445 format for the duration (using seconds).
+            } else {
+                values.put(CalendarContract.Events.DTEND, calDate.getTimeInMillis()+60*60*500);
+            }
+
             System.out.println(Calendar.getInstance().getTimeZone().getID());
             Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
 
@@ -155,17 +173,28 @@ public class Task {
         Log.i(DEBUG_TAG, "Deleted " + iNumRowsDeleted + " calendar entry.");
     }
 
-
     public int updateEvent(Context context) {
         int iNumRowsUpdated = 0;
         GregorianCalendar calDate = new GregorianCalendar(this._year, this._month, this._day, this._hour, this._minute);
+
+        String freq = defineFrequency();
 
         ContentValues event = new ContentValues();
 
         event.put(CalendarContract.Events.TITLE, this._title);
         event.put("hasAlarm", 1); // 0 for false, 1 for true
         event.put(CalendarContract.Events.DTSTART, calDate.getTimeInMillis());
-        event.put(CalendarContract.Events.DTEND, calDate.getTimeInMillis()+60*60*1000);
+        //event.put(CalendarContract.Events.DTEND, calDate.getTimeInMillis()+60*60*500);
+
+        // TODO: Implement the RFC2445 format when using duration (it's a text format)
+        if (freq != "") {
+            event.put(CalendarContract.Events.RRULE, freq);
+            long durationSeconds = 60*30;
+            event.put(CalendarContract.Events.DURATION, "P" + durationSeconds + "S");
+
+        } else {
+            event.put(CalendarContract.Events.DTEND, calDate.getTimeInMillis()+60*60*500);
+        }
 
         Uri eventsUri = Uri.parse(CALENDAR_URI_BASE+"events");
         Uri eventUri = ContentUris.withAppendedId(eventsUri, this._eventId);
@@ -176,5 +205,23 @@ public class Task {
         Log.i(DEBUG_TAG, "Updated " + iNumRowsUpdated + " calendar entry.");
 
         return iNumRowsUpdated;
+    }
+
+    public String defineFrequency(){
+
+        switch (_frequency){
+            case 0:
+                return "";
+            case 1:
+                return "FREQ=DAILY";
+            case 2:
+                return "FREQ=WEEKLY";
+            case 3:
+                return "FREQ=MONTHLY";
+            case 4:
+                return "FREQ=YEARLY";
+            default:
+                return "";
+        }
     }
 }

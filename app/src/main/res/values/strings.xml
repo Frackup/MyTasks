@@ -31,6 +31,14 @@
     <string name="addedTask">The task has been correctly added to the calendar.</string>
     <string name="alreadyExists"> already exists. Please use a different name.</string>
     <string name="addtasks_name">Add Tasks</string>
+    <string name="frequency">Frequency :</string>
+    <string name="freqDisplay">Freq Display</string>
+    <string name="freqNone">None</string>
+    <string name="freqDaily">Daily</string>
+    <string name="freqWeekly">Weekly</string>
+    <string name="freqMonthly">Monthly</string>
+    <string name="freqYearly">Yearly</string>
+
 
     <!-- DATE PICKER DIALOG FRAGMENT -->
     <string name="txtDPTitle">Select the date of your task</string>

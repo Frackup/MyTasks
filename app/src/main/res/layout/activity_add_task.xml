@@ -16,13 +16,13 @@
         android:layout_gravity="center_horizontal"
         android:hint="@string/txtTaskName"
         android:gravity="center_horizontal"
-        android:layout_above="@+id/txtTaskDate"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="20dp"
         android:focusable="true"
         android:singleLine="true"
         android:focusableInTouchMode="true"
-        android:imeOptions="actionDone" />
+        android:imeOptions="actionDone"
+        android:layout_above="@+id/txtTaskDate"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="20dp" />
 
     <EditText
         style="?android:attr/spinnerStyle"
@@ -35,8 +35,9 @@
         android:clickable="true"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:layout_centerVertical="true"
-        android:layout_alignParentStart="true" />
+        android:layout_above="@+id/txtTaskTime"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="20dp" />
 
     <EditText
         style="?android:attr/spinnerStyle"
@@ -46,17 +47,16 @@
         android:layout_gravity="center_horizontal"
         android:hint="@string/txtTaskTime"
         android:gravity="center_horizontal"
-        android:layout_below="@+id/txtTaskDate"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="20dp"
-        android:clickable="true" />
+        android:clickable="true"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true" />
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/btnCreateTask"
         android:background="@android:color/transparent"
-        android:layout_marginRight="80dp"
+        android:layout_marginRight="60dp"
         android:src="@drawable/ic_check_circle_black_18dp"
         android:tint="#ff38af48"
         android:nestedScrollingEnabled="false"
@@ -64,7 +64,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignEnd="@+id/txtTaskTime"
         android:layout_marginEnd="0dp"
-        android:layout_marginBottom="50dp" />
+        android:layout_marginBottom="25dp" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -73,10 +73,44 @@
         android:background="@android:color/transparent"
         android:layout_marginRight="0dp"
         android:src="@drawable/ic_go_black_18dp"
-        android:layout_marginLeft="80dp"
+        android:layout_marginLeft="60dp"
         android:tint="#ff2080fa"
         android:onClick="goToHomePage"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="50dp" />
+        android:layout_marginBottom="25dp" />
+
+    <SeekBar
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBarFreq"
+        android:layout_below="@+id/txtTaskTime"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="60dp"
+        android:max="4"
+        android:progress="0"
+        android:indeterminate="false" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/txtFreqDisp"
+        android:layout_below="@+id/seekBarFreq"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:hint="@string/freqDisplay" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/frequency"
+        android:id="@+id/txtFreq"
+        android:layout_alignEnd="@+id/btnTaskList"
+        android:layout_toLeftOf="@+id/txtFreqDisp"
+        android:layout_alignBaseline="@+id/txtFreqDisp"
+        android:layout_marginRight="10dp" />
 </RelativeLayout>

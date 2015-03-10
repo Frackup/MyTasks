@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.sql.SQLException;
@@ -33,6 +35,8 @@ public class AddTask extends ActionBarActivity implements DatePFragment.OnDatePi
     private EditText txtTaskName;
     private EditText txtTaskDate;
     private EditText txtTaskTime;
+    private SeekBar seekBarFrequency;
+    private TextView txtFreqDisplay;
 
     // Variables dealing with a Task object to be edited and used within the AddTask Activity
     private String taskName;
@@ -47,6 +51,7 @@ public class AddTask extends ActionBarActivity implements DatePFragment.OnDatePi
     // Other needed variables
     private Task mTask;
     private Calendar cal;
+    private int frequency;
 
     private DatabaseTaskHandler dbHandler;
 
@@ -61,23 +66,7 @@ public class AddTask extends ActionBarActivity implements DatePFragment.OnDatePi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
-
-        // Locate the textView of the xml display and associate them to the private variables.
-        txtTaskName = (EditText) findViewById(R.id.txtTaskName);
-        txtTaskName.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        txtTaskDate = (EditText) findViewById(R.id.txtTaskDate);
-        txtTaskTime = (EditText) findViewById(R.id.txtTaskTime);
-        cal = Calendar.getInstance();
-        dbHandler = new DatabaseTaskHandler(this);
-        try {
-            dbHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        // This prevent from having to tap twice when selecting the chose date or chose time line.
-        txtTaskDate.setFocusable(false);
-        txtTaskTime.setFocusable(false);
+        initVariables();
 
         // Implementing the detection of a click on the date selection line (to display the DatePicker)
         txtTaskDate.setOnClickListener(new View.OnClickListener() {
@@ -102,6 +91,73 @@ public class AddTask extends ActionBarActivity implements DatePFragment.OnDatePi
                 showTimePickerDialog(v.getId());
             }
         });
+
+        seekBarFrequency.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                frequency = progress;
+                changeFreqDisplay(frequency);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+    }
+
+    private void initVariables() {
+
+        // DatabaseHandler initialization
+        dbHandler = new DatabaseTaskHandler(this);
+        try {
+            dbHandler.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // Locate the textView of the xml display and associate them to the private variables.
+        txtTaskName = (EditText) findViewById(R.id.txtTaskName);
+        txtTaskDate = (EditText) findViewById(R.id.txtTaskDate);
+        txtTaskTime = (EditText) findViewById(R.id.txtTaskTime);
+        seekBarFrequency = (SeekBar) findViewById(R.id.seekBarFreq);
+        txtFreqDisplay = (TextView) findViewById(R.id.txtFreqDisp);
+
+        // This prevent from having to tap twice when selecting the chose date or chose time line.
+        txtTaskDate.setFocusable(false);
+        txtTaskTime.setFocusable(false);
+
+        // Other initialization
+        txtTaskName.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        cal = Calendar.getInstance();
+        frequency = 0;
+
+        changeFreqDisplay(frequency);
+    }
+
+    private void changeFreqDisplay(int freq) {
+        switch (freq) {
+            case 0:
+                txtFreqDisplay.setText(R.string.freqNone);
+                break;
+            case 1:
+                txtFreqDisplay.setText(R.string.freqDaily);
+                break;
+            case 2:
+                txtFreqDisplay.setText(R.string.freqWeekly);
+                break;
+            case 3:
+                txtFreqDisplay.setText(R.string.freqMonthly);
+                break;
+            case 4:
+                txtFreqDisplay.setText(R.string.freqYearly);
+                break;
+        }
     }
 
     @Override
@@ -197,7 +253,7 @@ public class AddTask extends ActionBarActivity implements DatePFragment.OnDatePi
             taskName = txtTaskName.getText().toString();
 
             // Create a new Task object
-            mTask = new Task(dbHandler.getTasksCount(), taskName, taskyear, taskmonth, taskday, taskhour, taskminute, taskdate, tasktime, 0);
+            mTask = new Task(dbHandler.getTasksCount(), taskName, taskyear, taskmonth, taskday, taskhour, taskminute, taskdate, tasktime, 0, frequency);
 
             // Add task event and reminder to the calendar.
             mTask.addEvent(context);

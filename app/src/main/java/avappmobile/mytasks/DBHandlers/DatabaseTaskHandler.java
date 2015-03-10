@@ -16,21 +16,7 @@ import avappmobile.mytasks.Objects.Task;
  * Created by Alexandre on 23/02/2015.
  */
 public class DatabaseTaskHandler {
-/*
-    private static final int DATABASE_VERSION = 1;
 
-    private static final String TABLE_TASKS = "tasks",
-            KEY_ID = "id",
-            KEY_TITLE = "title",
-            KEY_YEAR = "year",
-            KEY_MONTH = "month",
-            KEY_DAY = "day",
-            KEY_HOUR = "hour",
-            KEY_MINUTE = "minute",
-            KEY_DATE = "date",
-            KEY_TIME = "time",
-            KEY_EVENT_ID = "eventid";
-*/
     private static final String DATABASE_TABLE = "tasks";
 
     private static final String ID = "id";
@@ -43,6 +29,7 @@ public class DatabaseTaskHandler {
     private static final String DATE = "date";
     private static final String TIME = "time";
     private static final String EVENT_ID = "eventid";
+    private static final String FREQUENCY = "frequency";
 
     private DatabaseHelper mDbHelper;
     private SQLiteDatabase mDb;
@@ -65,7 +52,6 @@ public class DatabaseTaskHandler {
     }
 
     public DatabaseTaskHandler(Context context) {
-        //super(context, DATABASE_NAME, null, DATABASE_VERSION);
         mCtx = context;
     }
 
@@ -84,21 +70,7 @@ public class DatabaseTaskHandler {
     public void close(){
         mDbHelper.close();
     }
-/*
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE " + DATABASE_TABLE + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + TITLE + " TEXT," +
-                YEAR + " TEXT," + MONTH + " TEXT," + DAY + " TEXT," + HOUR + " TEXT," + MINUTE + " TEXT," +
-                DATE + " TEXT," + TIME + " TEXT," + EVENT_ID + " TEXT)");
-    }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TASKS);
-
-        onCreate(db);
-    }
-*/
     public void createTask(Task task) {
         ContentValues values = new ContentValues();
 
@@ -111,19 +83,20 @@ public class DatabaseTaskHandler {
         values.put(DATE, task.getDate());
         values.put(TIME, task.getTime());
         values.put(EVENT_ID, task.getEventId());
+        values.put(FREQUENCY, task.getFrequency());
 
         mDb.insert(DATABASE_TABLE, null, values);
     }
 
     public Task getTask(int id) {
-        Cursor cursor = mDb.query(DATABASE_TABLE, new String[] { ID, TITLE, YEAR, MONTH, DAY, HOUR, MINUTE, DATE, TIME, EVENT_ID }, ID + "=?", new String[] { String.valueOf(id) }, null, null, null, null );
+        Cursor cursor = mDb.query(DATABASE_TABLE, new String[] { ID, TITLE, YEAR, MONTH, DAY, HOUR, MINUTE, DATE, TIME, EVENT_ID, FREQUENCY }, ID + "=?", new String[] { String.valueOf(id) }, null, null, null, null );
 
         if (cursor != null)
             cursor.moveToFirst();
 
         Task task = new Task(Integer.parseInt(cursor.getString(0)), cursor.getString(1), Integer.parseInt(cursor.getString(2)), Integer.parseInt(cursor.getString(3)),
                 Integer.parseInt(cursor.getString(4)), Integer.parseInt(cursor.getString(5)), Integer.parseInt(cursor.getString(6)), cursor.getString(7), cursor.getString(8),
-                Long.parseLong(cursor.getString(9)));
+                Long.parseLong(cursor.getString(9)), Integer.parseInt(cursor.getString(10)));
 
         return task;
     }
@@ -154,6 +127,7 @@ public class DatabaseTaskHandler {
         values.put(DATE, task.getDate());
         values.put(TIME, task.getTime());
         values.put(EVENT_ID, task.getEventId());
+        values.put(FREQUENCY, task.getFrequency());
 
         int rowsAffected = mDb.update(DATABASE_TABLE, values, ID + "=" + task.getId(), null);
 
@@ -169,129 +143,12 @@ public class DatabaseTaskHandler {
             do {
                 tasks.add(new Task(Integer.parseInt(cursor.getString(0)), cursor.getString(1), Integer.parseInt(cursor.getString(2)),
                         Integer.parseInt(cursor.getString(3)), Integer.parseInt(cursor.getString(4)), Integer.parseInt(cursor.getString(5)),
-                        Integer.parseInt(cursor.getString(6)), cursor.getString(7), cursor.getString(8), Long.parseLong(cursor.getString(9))));
+                        Integer.parseInt(cursor.getString(6)), cursor.getString(7), cursor.getString(8), Long.parseLong(cursor.getString(9)),
+                        Integer.parseInt(cursor.getString(10))));
             }
             while (cursor.moveToNext());
         }
 
         return tasks;
     }
-/*
-    public DatabaseTaskHandler(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE " + TABLE_TASKS + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_TITLE + " TEXT," +
-                KEY_YEAR + " TEXT," + KEY_MONTH + " TEXT," + KEY_DAY + " TEXT," + KEY_HOUR + " TEXT," + KEY_MINUTE + " TEXT," +
-                KEY_DATE + " TEXT," + KEY_TIME + " TEXT," + KEY_EVENT_ID + " TEXT)");
-
-        db.execSQL("CREATE TABLE " + TABLE_REMINDERS + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_DESC + " TEXT," +
-                KEY_ACTIVE + " TEXT," + KEY_REM_HOUR + " TEXT," + KEY_REM_MINUTE + " TEXT," + KEY_DURATION + " TEXT)");
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TASKS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_REMINDERS);
-
-        onCreate(db);
-    }
-
-    public void createTask(Task task) {
-        SQLiteDatabase db = getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-
-        values.put(KEY_TITLE, task.getTitle());
-        values.put(KEY_YEAR, task.getYear());
-        values.put(KEY_MONTH, task.getMonth());
-        values.put(KEY_DAY, task.getDay());
-        values.put(KEY_HOUR, task.getHour());
-        values.put(KEY_MINUTE, task.getMinute());
-        values.put(KEY_DATE, task.getDate());
-        values.put(KEY_TIME, task.getTime());
-        values.put(KEY_EVENT_ID, task.getEventId());
-
-        db.insert(TABLE_TASKS, null, values);
-        db.close();
-    }
-
-    public Task getTask(int id) {
-        SQLiteDatabase db = getReadableDatabase();
-
-        Cursor cursor = db.query(TABLE_TASKS, new String[] { KEY_ID, KEY_TITLE, KEY_YEAR, KEY_MONTH, KEY_DAY, KEY_HOUR, KEY_MINUTE, KEY_DATE, KEY_TIME, KEY_EVENT_ID }, KEY_ID + "=?", new String[] { String.valueOf(id) }, null, null, null, null );
-
-        if (cursor != null)
-            cursor.moveToFirst();
-
-        Task task = new Task(Integer.parseInt(cursor.getString(0)), cursor.getString(1), Integer.parseInt(cursor.getString(2)), Integer.parseInt(cursor.getString(3)),
-                Integer.parseInt(cursor.getString(4)), Integer.parseInt(cursor.getString(5)), Integer.parseInt(cursor.getString(6)), cursor.getString(7), cursor.getString(8),
-                Long.parseLong(cursor.getString(9)));
-        db.close();
-        cursor.close();
-        return task;
-    }
-
-    public void deleteTask(Task task, Context context) {
-        // Remove the events and reminders from the calendar app
-        task.removeEvent(context);
-
-        SQLiteDatabase db = getWritableDatabase();
-        db.delete(TABLE_TASKS, KEY_ID + "=?", new String[] { String.valueOf(task.getId()) });
-        db.close();
-    }
-
-    public int getTasksCount() {
-        SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_TASKS, null);
-        int count = cursor.getCount();
-        db.close();
-        cursor.close();
-
-        return count;
-    }
-
-    public int updateTask(Task task) {
-        SQLiteDatabase db = getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-
-        values.put(KEY_TITLE, task.getTitle());
-        values.put(KEY_YEAR, task.getYear());
-        values.put(KEY_MONTH, task.getMonth());
-        values.put(KEY_DAY, task.getDay());
-        values.put(KEY_HOUR, task.getHour());
-        values.put(KEY_MINUTE, task.getMinute());
-        values.put(KEY_DATE, task.getDate());
-        values.put(KEY_TIME, task.getTime());
-        values.put(KEY_EVENT_ID, task.getEventId());
-
-        int rowsAffected = db.update(TABLE_TASKS, values, KEY_ID + "=" + task.getId(), null);
-        db.close();
-
-        return rowsAffected;
-    }
-
-    public List<Task> getAllTasks() {
-        List<Task> tasks = new ArrayList<Task>();
-
-        SQLiteDatabase db = getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_TASKS, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                tasks.add(new Task(Integer.parseInt(cursor.getString(0)), cursor.getString(1), Integer.parseInt(cursor.getString(2)),
-                        Integer.parseInt(cursor.getString(3)), Integer.parseInt(cursor.getString(4)), Integer.parseInt(cursor.getString(5)),
-                        Integer.parseInt(cursor.getString(6)), cursor.getString(7), cursor.getString(8), Long.parseLong(cursor.getString(9))));
-            }
-            while (cursor.moveToNext());
-        }
-        cursor.close();
-        db.close();
-        return tasks;
-    }
-
-*/
 }

@@ -25,7 +25,8 @@ public class DatabaseAdapter {
             KEY_MINUTE = "minute",
             KEY_DATE = "date",
             KEY_TIME = "time",
-            KEY_EVENT_ID = "eventid";
+            KEY_EVENT_ID = "eventid",
+            KEY_FREQUENCY = "frequency";
 
     private static final String TABLE_REMINDERS = "reminders",
             KEY_REM_ID = "id",
@@ -63,7 +64,7 @@ public class DatabaseAdapter {
         {
             db.execSQL("CREATE TABLE " + TABLE_TASKS + "(" + KEY_TASK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_TITLE + " TEXT," +
                     KEY_YEAR + " TEXT," + KEY_MONTH + " TEXT," + KEY_DAY + " TEXT," + KEY_HOUR + " TEXT," + KEY_MINUTE + " TEXT," +
-                    KEY_DATE + " TEXT," + KEY_TIME + " TEXT," + KEY_EVENT_ID + " TEXT)");
+                    KEY_DATE + " TEXT," + KEY_TIME + " TEXT," + KEY_EVENT_ID + " TEXT," + KEY_FREQUENCY + " TEXT)");
 
             db.execSQL("CREATE TABLE " + TABLE_REMINDERS + "(" + KEY_REM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_DESC + " TEXT," +
                     KEY_ACTIVE + " TEXT," + KEY_REM_HOUR + " TEXT," + KEY_REM_MINUTE + " TEXT," + KEY_DURATION + " TEXT)");
