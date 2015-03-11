@@ -104,7 +104,6 @@ public class EditTask extends ActionBarActivity implements DatePFragment.OnDateP
         });
     }
 
-    // TODO: to be completed
     public void initVariables() {
 
         // The context of the dialog Fragment is getActivity()

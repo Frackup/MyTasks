@@ -2,6 +2,7 @@ package avappmobile.mytasks.Objects;
 
 /**
  * Created by Alexandre on 01/03/2015.
+ * Reminder object
  */
 
 public class Reminder {

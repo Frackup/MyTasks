@@ -14,6 +14,7 @@ import avappmobile.mytasks.Objects.Reminder;
 
 /**
  * Created by Alexandre on 01/03/2015.
+ * All database methods related to the reminders.
  */
 public class DatabaseReminderHandler  {
 
@@ -46,6 +47,10 @@ public class DatabaseReminderHandler  {
         }
     }
 
+    /**
+     * Constructor
+     * @param context
+     */
     public DatabaseReminderHandler(Context context) {
         mCtx = context;
     }
@@ -53,7 +58,7 @@ public class DatabaseReminderHandler  {
     /**
      * open the db
      * @return this
-     * @throws android.database.SQLException
+     * @throws SQLException
      * return type: DatabaseReminderHandler
      */
     public DatabaseReminderHandler open() throws SQLException {
@@ -62,6 +67,10 @@ public class DatabaseReminderHandler  {
         return this;
     }
 
+    /**
+     * close the db
+     * return type: void
+     */
     public void close(){
         mDbHelper.close();
     }

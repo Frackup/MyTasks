@@ -14,6 +14,7 @@ import avappmobile.mytasks.Objects.Task;
 
 /**
  * Created by Alexandre on 23/02/2015.
+ * All database methods related to the Tasks
  */
 public class DatabaseTaskHandler {
 
@@ -51,6 +52,10 @@ public class DatabaseTaskHandler {
         }
     }
 
+    /**
+     * Constructor
+     * @param context
+     */
     public DatabaseTaskHandler(Context context) {
         mCtx = context;
     }
@@ -58,7 +63,7 @@ public class DatabaseTaskHandler {
     /**
      * open the db
      * @return this
-     * @throws android.database.SQLException
+     * @throws SQLException
      * return type: DatabaseTaskHandler
      */
     public DatabaseTaskHandler open() throws SQLException {
@@ -67,6 +72,10 @@ public class DatabaseTaskHandler {
         return this;
     }
 
+    /**
+     * close the db
+     * return type: void
+     */
     public void close(){
         mDbHelper.close();
     }

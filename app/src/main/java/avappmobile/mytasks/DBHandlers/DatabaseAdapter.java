@@ -8,6 +8,7 @@ import android.util.Log;
 
 /**
  * Created by Alexandre on 02/03/2015.
+ * Global Database Adapter where all the tables and the database are created.
  */
 public class DatabaseAdapter {
 

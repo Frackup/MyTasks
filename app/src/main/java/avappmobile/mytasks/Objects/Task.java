@@ -17,6 +17,7 @@ import avappmobile.mytasks.DBHandlers.DatabaseReminderHandler;
 
 /**
  * Created by Alexandre on 19/02/2015.
+ * Task object
  */
 public class Task {
 
@@ -107,8 +108,6 @@ public class Task {
             values.put(CalendarContract.Events.EVENT_TIMEZONE, Calendar.getInstance()
                     .getTimeZone().getID());
 
-
-            // TODO: Implement the RFC2445 format when using duration (it's a text format)
             // If a frequency has been selected, add it to the calendar
             if (freq != "") {
                 values.put(CalendarContract.Events.RRULE, freq);
@@ -124,7 +123,7 @@ public class Task {
             // Save the eventId into the Task object for possible future delete.
             this._eventId = Long.parseLong(uri.getLastPathSegment());
 
-            // Check on base how many reminders are set, and what is their duration time in minutes
+            // Check on base how many reminders are set, and their duration time in minutes
             // The first reminder will always be set
             setReminder(cr, this._eventId, dbRemHandler.getReminder("REMINDER_1").getDuration());
 
@@ -184,13 +183,11 @@ public class Task {
         event.put(CalendarContract.Events.TITLE, this._title);
         event.put("hasAlarm", 1); // 0 for false, 1 for true
         event.put(CalendarContract.Events.DTSTART, calDate.getTimeInMillis());
-        //event.put(CalendarContract.Events.DTEND, calDate.getTimeInMillis()+60*60*500);
 
-        // TODO: Implement the RFC2445 format when using duration (it's a text format)
         if (freq != "") {
             event.put(CalendarContract.Events.RRULE, freq);
             long durationSeconds = 60*30;
-            event.put(CalendarContract.Events.DURATION, "P" + durationSeconds + "S");
+            event.put(CalendarContract.Events.DURATION, "P" + durationSeconds + "S"); // RFC2445 format for the duration (using seconds).
 
         } else {
             event.put(CalendarContract.Events.DTEND, calDate.getTimeInMillis()+60*60*500);
@@ -207,6 +204,7 @@ public class Task {
         return iNumRowsUpdated;
     }
 
+    // Using a switch to translate the frequency in (int) to a string usable with the calendar adding method.
     public String defineFrequency(){
 
         switch (_frequency){

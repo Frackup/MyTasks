@@ -87,7 +87,7 @@ public class HomePage extends ActionBarActivity {
         }
         dbRemHandler.initReminders();
 
-        taskListView = (ListView) findViewById(R.id.listViewTasks);
+        taskListView = (ListView) findViewById(R.id.listViewTasksDay);
         registerForContextMenu(taskListView);
 
     }
@@ -112,6 +112,9 @@ public class HomePage extends ActionBarActivity {
                 Intent intent = new Intent(this, RemindersSettings.class);
                 startActivity(intent);
                 break;
+            case R.id.action_add:
+                View view = getLayoutInflater().inflate(R.layout.activity_home_page,null);
+                goToAddTask(view);
             default:
                 return super.onOptionsItemSelected(item);
         }

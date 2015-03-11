@@ -13,8 +13,12 @@ import java.util.Calendar;
 
 /**
  * Created by Alexandre on 18/02/2015.
+ * This class is built to put all the details dealing with the creation of a TimePicker into a DialogFragment
  */
 public class TimePFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
+
+    private int hour;
+    private int minute;
 
     TimePicker tp;
     OnTimePickedListener mCallback;
@@ -39,23 +43,28 @@ public class TimePFragment extends DialogFragment implements TimePickerDialog.On
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
-        mCallback = (OnTimePickedListener)getActivity();
+        initVariable();
 
+        TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), this, hour, minute, true);
+
+        // Create a new instance of DatePickerDialog and return it
+        return timePickerDialog;
+    }
+
+    public void initVariable() {
+
+        mCallback = (OnTimePickedListener)getActivity();
         Calendar cal = Calendar.getInstance();
         Bundle bundle = this.getArguments();
         mLayoutId = bundle.getInt("layoutId");
-        int hour = cal.get(Calendar.HOUR_OF_DAY);
-        int minute = cal.get(Calendar.MINUTE);
+        hour = cal.get(Calendar.HOUR_OF_DAY);
+        minute = cal.get(Calendar.MINUTE);
 
         View view = getActivity().getLayoutInflater().inflate(R.layout.timepfragment, null);
 
         tp = (TimePicker) view.findViewById(R.id.timePicker);
         tp.setIs24HourView(true);
 
-        TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), this, hour, minute, true);
-
-        // Create a new instance of DatePickerDialog and return it
-        return timePickerDialog;
     }
 
     @Override

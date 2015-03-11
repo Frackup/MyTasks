@@ -28,6 +28,7 @@ import avappmobile.mytasks.Objects.Task;
 
 /**
  * Created by Alexandre on 18/02/2015.
+ * This class is build to allow users to add a task into the database and the calendar.
  */
 public class AddTask extends ActionBarActivity implements DatePFragment.OnDatePickedListener, TimePFragment.OnTimePickedListener {
 
@@ -92,6 +93,7 @@ public class AddTask extends ActionBarActivity implements DatePFragment.OnDatePi
             }
         });
 
+        // Implementing the detection of an action on the seekbar (to grab the number picked)
         seekBarFrequency.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -111,6 +113,7 @@ public class AddTask extends ActionBarActivity implements DatePFragment.OnDatePi
         });
     }
 
+    // Initialization of all the variables of the java class.
     private void initVariables() {
 
         // DatabaseHandler initialization
@@ -140,6 +143,7 @@ public class AddTask extends ActionBarActivity implements DatePFragment.OnDatePi
         changeFreqDisplay(frequency);
     }
 
+    // Switch to translate the (int) frequency into a text to be displayed on screen.
     private void changeFreqDisplay(int freq) {
         switch (freq) {
             case 0:
@@ -176,15 +180,25 @@ public class AddTask extends ActionBarActivity implements DatePFragment.OnDatePi
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id){
+            case R.id.action_settings:
+                Intent intent = new Intent(this, RemindersSettings.class);
+                startActivity(intent);
+                break;
+            case R.id.action_save:
+                View view = getLayoutInflater().inflate(R.layout.activity_add_task, null);
+                try {
+                    createNewTask(view);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }            default:
+                return super.onOptionsItemSelected(item);
         }
 
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
-
+    // Methods to display the calendar to pick a date.
     public void showDatePickerDialog(int layoutId) {
         Integer year = cal.get(Calendar.YEAR);
         Integer month = cal.get(Calendar.MONTH);
@@ -203,6 +217,7 @@ public class AddTask extends ActionBarActivity implements DatePFragment.OnDatePi
         newFragment.show(fm, Integer.toString(layoutId));
     }
 
+    // Methods to display the timer to pick a time.
     public void showTimePickerDialog(int layoutId) {
         Integer hour = cal.get(Calendar.HOUR);
         Integer minute = cal.get(Calendar.MINUTE);
@@ -230,6 +245,11 @@ public class AddTask extends ActionBarActivity implements DatePFragment.OnDatePi
         return bundle;
     }
 
+    // Method to create a new task when saving the selected items.
+    /**
+     * @return this
+     * @throws SQLException
+     */
     public void createNewTask(View view) throws SQLException {
         // Check if all the necessary data have been filled, return an alert instead.
         if (txtTaskName.getText().toString().matches("") || txtTaskDate.getText().toString().matches("") || txtTaskTime.getText().toString().matches("")) {
@@ -266,6 +286,10 @@ public class AddTask extends ActionBarActivity implements DatePFragment.OnDatePi
             txtTaskName.setText("");
             txtTaskDate.setText("");
             txtTaskTime.setText("");
+            frequency = 0;
+            seekBarFrequency.setProgress(frequency);
+            changeFreqDisplay(frequency);
+
         }
     }
 

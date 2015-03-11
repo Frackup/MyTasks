@@ -15,6 +15,7 @@ import avappmobile.mytasks.R;
 
 /**
  * Created by Alexandre on 02/03/2015.
+ * This module allows to create the list displaying the tasks according to the tasklist_item.xml format
  */
 public class TaskListAdapter extends ArrayAdapter<Task> {
 

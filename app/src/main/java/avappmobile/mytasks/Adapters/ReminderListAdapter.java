@@ -15,6 +15,7 @@ import avappmobile.mytasks.R;
 
 /**
  * Created by Alexandre on 02/03/2015.
+ * This module allows to create the list displaying the reminders according to the reminderlist_item.xml format
  */
 public class ReminderListAdapter extends ArrayAdapter<Reminder> {
 
@@ -41,12 +42,14 @@ public class ReminderListAdapter extends ArrayAdapter<Reminder> {
         TextView remDescription = (TextView) view.findViewById(R.id.txtReminderDesc);
         remDescription.setText(currentReminder.getDescription());
 
+        // Checking if the hour (int) is on 1 or 2 digits, to complete if needed.
         TextView remHours = (TextView) view.findViewById(R.id.txtRemHr);
         if(currentReminder.getHour() < 10)
             remHours.setText("0" + String.valueOf(currentReminder.getHour()));
         else
             remHours.setText(String.valueOf(currentReminder.getHour()));
 
+        // Checking if the hour (int) is on 1 or 2 digits, to complete if needed.
         TextView remMinutes = (TextView) view.findViewById(R.id.txtRemMin);
         if(currentReminder.getMinute() < 10)
             remMinutes.setText("0" + String.valueOf(currentReminder.getMinute()));
