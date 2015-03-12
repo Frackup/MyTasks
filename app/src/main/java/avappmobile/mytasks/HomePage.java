@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,6 +38,7 @@ public class HomePage extends ActionBarActivity {
     private DatabaseReminderHandler dbRemHandler;
     ListView taskListView;
     ArrayAdapter<Task> taskAdapter;
+    private Toolbar toolbar_home_page;
 
     private boolean loaded = false;
 
@@ -87,6 +89,11 @@ public class HomePage extends ActionBarActivity {
         }
         dbRemHandler.initReminders();
 
+        toolbar_home_page = (Toolbar) findViewById(R.id.toolbar_home_page);
+        toolbar_home_page.setTitle("My Tasks");
+        if (toolbar_home_page != null) {
+            setSupportActionBar(toolbar_home_page);
+        }
         taskListView = (ListView) findViewById(R.id.listViewTasksDay);
         registerForContextMenu(taskListView);
 
@@ -96,6 +103,7 @@ public class HomePage extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        //toolbar_home_page.inflateMenu(R.menu.menu_home_page);
         getMenuInflater().inflate(R.menu.menu_home_page, menu);
         return true;
     }

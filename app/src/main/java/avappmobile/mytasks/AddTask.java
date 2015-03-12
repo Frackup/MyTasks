@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,6 +39,7 @@ public class AddTask extends ActionBarActivity implements DatePFragment.OnDatePi
     private EditText txtTaskTime;
     private SeekBar seekBarFrequency;
     private TextView txtFreqDisplay;
+    private Toolbar toolbar_add_task;
 
     // Variables dealing with a Task object to be edited and used within the AddTask Activity
     private String taskName;
@@ -131,6 +133,13 @@ public class AddTask extends ActionBarActivity implements DatePFragment.OnDatePi
         seekBarFrequency = (SeekBar) findViewById(R.id.seekBarFreq);
         txtFreqDisplay = (TextView) findViewById(R.id.txtFreqDisp);
 
+        // Toolbar init
+        toolbar_add_task = (Toolbar) findViewById(R.id.toolbar_add_task);
+        toolbar_add_task.setNavigationIcon(R.drawable.mytaskstheme_ic_navigation_drawer);
+        if(toolbar_add_task != null) {
+            setSupportActionBar(toolbar_add_task);
+        }
+
         // This prevent from having to tap twice when selecting the chose date or chose time line.
         txtTaskDate.setFocusable(false);
         txtTaskTime.setFocusable(false);
@@ -168,6 +177,7 @@ public class AddTask extends ActionBarActivity implements DatePFragment.OnDatePi
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         super.onCreateOptionsMenu(menu);
+        //toolbar_add_task.inflateMenu(R.menu.menu_add_task);
         getMenuInflater().inflate(R.menu.menu_add_task, menu);
 
         return true;

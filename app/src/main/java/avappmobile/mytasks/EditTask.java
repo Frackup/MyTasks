@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -33,9 +36,9 @@ public class EditTask extends ActionBarActivity implements DatePFragment.OnDateP
     private EditText txtEditName;
     private EditText txtEditDate;
     private EditText txtEditTime;
-    private Button btnEditTask;
     private SeekBar seekBarEditFreq;
     private TextView txtEditFreqDisplay;
+    private Toolbar toolbar_edit_task;
 
     private String taskName;
     private int taskyear;
@@ -122,9 +125,15 @@ public class EditTask extends ActionBarActivity implements DatePFragment.OnDateP
         txtEditName.setImeOptions(EditorInfo.IME_ACTION_DONE);
         txtEditDate = (EditText) findViewById(R.id.txtEditDate);
         txtEditTime = (EditText) findViewById(R.id.txtEditTime);
-        btnEditTask = (Button) findViewById(R.id.btnUpdateTask);
         seekBarEditFreq = (SeekBar) findViewById(R.id.seekBarEditFreq);
         txtEditFreqDisplay = (TextView) findViewById(R.id.txtEditFreqDisp);
+
+        // Toolbar init
+        toolbar_edit_task = (Toolbar) findViewById(R.id.toolbar_edit_task);
+        toolbar_edit_task.setNavigationIcon(R.drawable.mytaskstheme_ic_navigation_drawer);
+        if(toolbar_edit_task != null) {
+            setSupportActionBar(toolbar_edit_task);
+        }
 
         // This prevent from having to tap twice to get the related onClick activity
         txtEditDate.setFocusable(false);
@@ -160,6 +169,41 @@ public class EditTask extends ActionBarActivity implements DatePFragment.OnDateP
                 txtEditFreqDisplay.setText(R.string.freqYearly);
                 break;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        super.onCreateOptionsMenu(menu);
+        //toolbar_edit_task.inflateMenu(R.menu.menu_edit_task);
+        getMenuInflater().inflate(R.menu.menu_add_task, menu);
+
+        return true;
+    }
+
+    // TODO : As there not any button, maybe there's no need to send the View to the task called through the toolbar. Check also Add Task.
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        switch (id){
+            case R.id.action_settings:
+                Intent intent = new Intent(this, RemindersSettings.class);
+                startActivity(intent);
+                break;
+            case R.id.action_edit:
+                View view = getLayoutInflater().inflate(R.layout.activity_edit_task, null);
+                //updateTask(view);
+                updateTask();
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+        return true;
     }
 
     public void showDatePickerDialog(int layoutId) {
@@ -207,7 +251,7 @@ public class EditTask extends ActionBarActivity implements DatePFragment.OnDateP
         return bundle;
     }
 
-    public void updateTask(View view) {
+    public void updateTask() {//View view) {
         // Check if all the necessary data have been filled, return an alert instead.
         if (txtEditName.getText().toString().matches("") || txtEditDate.getText().toString().matches("") || txtEditTime.getText().toString().matches("")) {
             AlertDialog alertDialog = new AlertDialog.Builder(getApplicationContext())

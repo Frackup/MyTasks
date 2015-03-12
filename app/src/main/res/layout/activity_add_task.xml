@@ -3,13 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:theme="@style/_MyTasksTheme"
+    android:theme="@style/MyTasksTheme"
     tools:context=".AddTask"
-    style="@style/_MyTasksTheme">
+    style="@style/MyTasksTheme">
+
+    <include layout="@layout/toolbar"
+        android:id="@+id/toolbar_add_task" />
 
     <EditText
         android:layout_width="match_parent"
@@ -21,11 +20,14 @@
         android:singleLine="true"
         android:focusableInTouchMode="true"
         android:imeOptions="actionDone"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentStart="false"
         android:layout_marginTop="15dp"
         android:paddingLeft="10dp"
-        android:theme="@style/_MyTasksTheme" />
+        android:theme="@style/MyTasksTheme"
+        android:layout_below="@+id/toolbar_add_task"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp" />
 
     <EditText
         style="?android:attr/spinnerStyle"
@@ -40,8 +42,10 @@
         android:layout_below="@+id/txtTaskName"
         android:layout_alignParentStart="true"
         android:layout_marginTop="15dp"
-        android:theme="@style/_MyTasksTheme"
-        android:paddingLeft="10dp" />
+        android:theme="@style/MyTasksTheme"
+        android:paddingLeft="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp" />
 
     <EditText
         style="?android:attr/spinnerStyle"
@@ -54,8 +58,10 @@
         android:layout_below="@+id/txtTaskDate"
         android:layout_alignParentStart="true"
         android:layout_marginTop="15dp"
-        android:theme="@style/_MyTasksTheme"
-        android:paddingLeft="10dp" />
+        android:theme="@style/MyTasksTheme"
+        android:paddingLeft="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp" />
 
     <SeekBar
         android:layout_width="fill_parent"
@@ -65,7 +71,7 @@
         android:max="4"
         android:progress="0"
         android:indeterminate="false"
-        android:theme="@style/_MyTasksTheme"
+        android:theme="@style/MyTasksTheme"
         android:layout_below="@+id/txtFreqDisp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp" />
@@ -77,23 +83,26 @@
         android:text="Medium Text"
         android:id="@+id/txtFreqDisp"
         android:hint="@string/freqDisplay"
-        android:theme="@style/_MyTasksTheme"
-        style="@style/_MyTasksTheme"
-        android:layout_below="@+id/txtFreq"
-        android:layout_marginTop="20dp"
-        android:layout_centerHorizontal="true" />
+        android:theme="@style/MyTasksTheme"
+        style="@style/MyTasksTheme"
+        android:layout_marginTop="260dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center_horizontal" />
 
     <TextView
-        style="@style/_MyTasksTheme"
+        style="@style/MyTasksTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/frequency"
         android:id="@+id/txtFreq"
         android:hint="@string/freqDisplay"
-        android:theme="@style/_MyTasksTheme"
-        android:layout_below="@+id/txtTaskTime"
+        android:theme="@style/MyTasksTheme"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="220dp"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentTop="true"
+        android:gravity="center_horizontal" />
 
 </RelativeLayout>

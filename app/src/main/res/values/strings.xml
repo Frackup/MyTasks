@@ -33,7 +33,7 @@
     <string name="addedTask">The task has been correctly added to the calendar.</string>
     <string name="alreadyExists"> already exists. Please use a different name.</string>
     <string name="addtasks_name">Add Tasks</string>
-    <string name="frequency">Recurring :</string>
+    <string name="frequency">Recurring</string>
     <string name="freqDisplay">Freq Display</string>
     <string name="freqNone">None</string>
     <string name="freqDaily">Daily</string>
@@ -61,6 +61,7 @@
     <string name="btnUpdateTask">Update Task Details</string>
     <string name="updatedTask">The task has been correctly updated.</string>
     <string name="edittasks_name">Edit Tasks</string>
+    <string name="action_edit">Save Changes</string>
 
     <!-- REMINDERS SETTINGS STRINGS -->
     <string name="reminderssettings_name">Reminders Settings</string>

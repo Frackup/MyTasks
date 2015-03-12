@@ -2,7 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".HomePage"
-    android:theme="@style/_MyTasksTheme">
+    android:theme="@style/MyTasksTheme">
+
+    <include
+        layout="@layout/toolbar"
+        android:id="@+id/toolbar_home_page" />
 
     <ListView
         android:paddingTop="@dimen/activity_vertical_margin"
@@ -24,15 +28,14 @@
         android:id="@+id/frameTxtDayL"
         android:layout_toLeftOf="@+id/txtTaskDay"
         android:layout_alignTop="@+id/txtTaskDay"
-        android:layout_alignBottom="@+id/txtTaskDay">
+        android:layout_alignBottom="@+id/txtTaskDay"
+        android:layout_marginLeft="5dp">
 
         <View
-            android:layout_width="142dp"
+            android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/material_blue_grey_800"
-            android:layout_gravity="center"
-            android:layout_above="@+id/listViewTasksDay"
-            android:layout_toEndOf="@+id/txtTaskDay" />
+            android:layout_gravity="center" />
     </FrameLayout>
 
     <TextView
@@ -45,9 +48,10 @@
         android:paddingRight="10dp"
         android:textColor="#fffa6d12"
         android:gravity="center_horizontal"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentTop="false"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/toolbar_home_page" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -56,15 +60,14 @@
         android:id="@+id/frameTxtDayR"
         android:layout_toRightOf="@+id/txtTaskDay"
         android:layout_alignTop="@+id/txtTaskDay"
-        android:layout_alignBottom="@+id/txtTaskDay">
+        android:layout_alignBottom="@+id/txtTaskDay"
+        android:layout_marginRight="5dp">
 
         <View
-            android:layout_width="142dp"
+            android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/material_blue_grey_800"
-            android:layout_gravity="center"
-            android:layout_above="@+id/listViewTasksDay"
-            android:layout_toEndOf="@+id/txtTaskDay" />
+            android:layout_gravity="center" />
     </FrameLayout>
 
     <TextView
@@ -87,10 +90,11 @@
         android:id="@+id/frameTxtWeekR"
         android:layout_toRightOf="@+id/txtTaskNext"
         android:layout_alignTop="@+id/txtTaskNext"
-        android:layout_alignBottom="@+id/txtTaskNext">
+        android:layout_alignBottom="@+id/txtTaskNext"
+        android:layout_marginRight="5dp">
 
         <View
-            android:layout_width="142dp"
+            android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/material_blue_grey_800"
             android:layout_gravity="center" />
@@ -102,13 +106,15 @@
         android:id="@+id/frameTxtWeekL"
         android:layout_alignTop="@+id/txtTaskNext"
         android:layout_toLeftOf="@+id/txtTaskNext"
-        android:layout_alignBottom="@+id/txtTaskNext">
+        android:layout_alignBottom="@+id/txtTaskNext"
+        android:layout_marginLeft="5dp">
 
         <View
-            android:layout_width="142dp"
+            android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/material_blue_grey_800"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:layout_marginLeft="0dp" />
     </FrameLayout>
 
     <ListView
@@ -116,6 +122,7 @@
         android:layout_height="fill_parent"
         android:id="@+id/listViewTasksNext"
         android:layout_below="@+id/txtTaskNext"
-        android:layout_marginTop="0dp" />
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="10dp" />
 
 </RelativeLayout>
