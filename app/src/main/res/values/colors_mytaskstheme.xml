@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="mytaskstheme_color">#ff8800</color>
+
+    <!-- Toolbar colors -->
+    <color name="mt_title_toolbar_color">#ff8800</color>
+    <color name="mt_toolbar_background_color">#808080</color>
+    <color name="mt_actionbar_color">@color/primary_material_light</color>
+    <color name="mt_menu_overflow_color">@color/primary_material_light</color>
+
+    <color name="mt_textview_color">#ff8800</color>
+    <color name="mt_texthighlight_color">#99ff8800</color>
 </resources>

@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import avappmobile.mytasks.Objects.Task;
@@ -147,6 +148,56 @@ public class DatabaseTaskHandler {
         List<Task> tasks = new ArrayList<Task>();
 
         Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                tasks.add(new Task(Integer.parseInt(cursor.getString(0)), cursor.getString(1), Integer.parseInt(cursor.getString(2)),
+                        Integer.parseInt(cursor.getString(3)), Integer.parseInt(cursor.getString(4)), Integer.parseInt(cursor.getString(5)),
+                        Integer.parseInt(cursor.getString(6)), cursor.getString(7), cursor.getString(8), Long.parseLong(cursor.getString(9)),
+                        Integer.parseInt(cursor.getString(10))));
+            }
+            while (cursor.moveToNext());
+        }
+
+        return tasks;
+    }
+
+    public List<Task> getDayTasks() {
+        List<Task> tasks = new ArrayList<Task>();
+        Calendar calDate = Calendar.getInstance();
+        int day = calDate.get(Calendar.DAY_OF_MONTH);
+        int month = calDate.get(Calendar.MONTH);
+        int year = calDate.get(Calendar.YEAR);
+
+        Cursor cursor = mDb.query(DATABASE_TABLE, new String[] { ID, TITLE, YEAR, MONTH, DAY, HOUR, MINUTE, DATE, TIME, EVENT_ID, FREQUENCY },
+                DAY + "=?" + " AND " + MONTH + "=?" + " AND " + YEAR + "=?",
+                new String[] { String.valueOf(day), String.valueOf(month), String.valueOf(year) },
+                null, null, null, null );
+
+        if (cursor.moveToFirst()) {
+            do {
+                tasks.add(new Task(Integer.parseInt(cursor.getString(0)), cursor.getString(1), Integer.parseInt(cursor.getString(2)),
+                        Integer.parseInt(cursor.getString(3)), Integer.parseInt(cursor.getString(4)), Integer.parseInt(cursor.getString(5)),
+                        Integer.parseInt(cursor.getString(6)), cursor.getString(7), cursor.getString(8), Long.parseLong(cursor.getString(9)),
+                        Integer.parseInt(cursor.getString(10))));
+            }
+            while (cursor.moveToNext());
+        }
+
+        return tasks;
+    }
+
+    public List<Task> getNextTasks() {
+        List<Task> tasks = new ArrayList<Task>();
+        Calendar calDate = Calendar.getInstance();
+        int day = calDate.get(Calendar.DAY_OF_MONTH);
+        int month = calDate.get(Calendar.MONTH);
+        int year = calDate.get(Calendar.YEAR);
+
+        Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE MONTH = " + month + " AND YEAR = " + year + " AND DAY > " + day +
+                " UNION ALL SELECT * FROM " + DATABASE_TABLE + " WHERE MONTH > " + month + " AND YEAR = " + year +
+                " UNION ALL SELECT * FROM " + DATABASE_TABLE + " WHERE YEAR > " + year
+                , null);
 
         if (cursor.moveToFirst()) {
             do {

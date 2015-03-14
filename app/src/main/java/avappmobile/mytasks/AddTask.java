@@ -39,7 +39,7 @@ public class AddTask extends ActionBarActivity implements DatePFragment.OnDatePi
     private EditText txtTaskTime;
     private SeekBar seekBarFrequency;
     private TextView txtFreqDisplay;
-    private Toolbar toolbar_add_task;
+    private Toolbar toolbarAddTask;
 
     // Variables dealing with a Task object to be edited and used within the AddTask Activity
     private String taskName;
@@ -134,10 +134,10 @@ public class AddTask extends ActionBarActivity implements DatePFragment.OnDatePi
         txtFreqDisplay = (TextView) findViewById(R.id.txtFreqDisp);
 
         // Toolbar init
-        toolbar_add_task = (Toolbar) findViewById(R.id.toolbar_add_task);
-        toolbar_add_task.setNavigationIcon(R.drawable.mytaskstheme_ic_navigation_drawer);
-        if(toolbar_add_task != null) {
-            setSupportActionBar(toolbar_add_task);
+        toolbarAddTask = (Toolbar) findViewById(R.id.toolbar_add_task);
+        toolbarAddTask.setNavigationIcon(R.drawable.mytaskstheme_ic_navigation_drawer);
+        if(toolbarAddTask != null) {
+            setSupportActionBar(toolbarAddTask);
         }
 
         // This prevent from having to tap twice when selecting the chose date or chose time line.
@@ -177,7 +177,6 @@ public class AddTask extends ActionBarActivity implements DatePFragment.OnDatePi
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         super.onCreateOptionsMenu(menu);
-        //toolbar_add_task.inflateMenu(R.menu.menu_add_task);
         getMenuInflater().inflate(R.menu.menu_add_task, menu);
 
         return true;
@@ -380,5 +379,6 @@ public class AddTask extends ActionBarActivity implements DatePFragment.OnDatePi
 
         // Displaying the time in the EditText box.
         txtTaskTime.setText(tasktime);
+
     }
 }

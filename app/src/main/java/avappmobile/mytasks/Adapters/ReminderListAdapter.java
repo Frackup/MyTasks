@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -55,6 +57,25 @@ public class ReminderListAdapter extends ArrayAdapter<Reminder> {
             remMinutes.setText("0" + String.valueOf(currentReminder.getMinute()));
         else
             remMinutes.setText(String.valueOf(currentReminder.getMinute()));
+
+        // Initializing the button
+        ImageButton editButton = (ImageButton) view.findViewById(R.id.imBtnEdit);
+        editButton.setTag(currentReminder.getId());
+
+        // Initializing the check box
+        CheckBox chckBxSlctRem = (CheckBox) view.findViewById(R.id.chkBxRem);
+        chckBxSlctRem.setTag(currentReminder.getId());
+        if(currentReminder.getActive() == 1) {
+            chckBxSlctRem.setChecked(true);
+        } else {
+            chckBxSlctRem.setChecked(false);
+        }
+
+        // Display specific for the firts reminder item which can't be modified nor disabled.
+        if(currentReminder.getDescription() == "REMINDER_1"){
+            chckBxSlctRem.setVisibility(view.INVISIBLE);
+            editButton.setVisibility(view.INVISIBLE);
+        }
 
         return view;
     }

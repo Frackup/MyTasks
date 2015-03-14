@@ -182,7 +182,7 @@ public class DatabaseReminderHandler  {
         if(count == 0){
 
             // Create the 3 reminders
-            Reminder rem1 = new Reminder(count, "REMINDER_1", 1, 0, 5, 5);
+            Reminder rem1 = new Reminder(count, "REMINDER_1", 1, 0, 15, 15);
             Reminder rem2 = new Reminder(count + 1, "REMINDER_2", 1, 1, 0, 60);
             Reminder rem3 = new Reminder(count + 2, "REMINDER_3", 1, 24, 0, 1440);
 
@@ -190,12 +190,5 @@ public class DatabaseReminderHandler  {
             this.createReminder(rem2);
             this.createReminder(rem3);
         }
-    }
-
-    public void switchActivation(String reminderName, int active) {
-        ContentValues values = new ContentValues();
-
-        values.put(ACTIVE, active);
-        mDb.update(DATABASE_TABLE, values, DESC + "='" + reminderName + "'", null);
     }
 }

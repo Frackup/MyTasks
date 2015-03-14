@@ -53,7 +53,7 @@
     <string name="btnTPValidate">Select</string>
 
     <!-- TAG ITEMS -->
-    <item type="id" name="taskId"> </item>
+    <item type="id" name="reminderId"></item>
     <item type="id" name="position"> </item>
 
     <!-- EDIT TASK STRINGS -->
@@ -73,6 +73,7 @@
     <string name="reminders_hr_text"> Hr</string>
     <string name="reminders_number">Number of reminder(s) :</string>
     <string name="blocked_reminder">The first reminder can\'t be modified nor inactivated.</string>
+    <string name="txtReminder">Set up your reminders</string>
     <string-array name="spinnerReminders">
         <item>1</item>
         <item>2</item>

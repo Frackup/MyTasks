@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -38,7 +37,7 @@ public class EditTask extends ActionBarActivity implements DatePFragment.OnDateP
     private EditText txtEditTime;
     private SeekBar seekBarEditFreq;
     private TextView txtEditFreqDisplay;
-    private Toolbar toolbar_edit_task;
+    private Toolbar toolbarEditTask;
 
     private String taskName;
     private int taskyear;
@@ -129,10 +128,10 @@ public class EditTask extends ActionBarActivity implements DatePFragment.OnDateP
         txtEditFreqDisplay = (TextView) findViewById(R.id.txtEditFreqDisp);
 
         // Toolbar init
-        toolbar_edit_task = (Toolbar) findViewById(R.id.toolbar_edit_task);
-        toolbar_edit_task.setNavigationIcon(R.drawable.mytaskstheme_ic_navigation_drawer);
-        if(toolbar_edit_task != null) {
-            setSupportActionBar(toolbar_edit_task);
+        toolbarEditTask = (Toolbar) findViewById(R.id.toolbar_edit_task);
+        toolbarEditTask.setNavigationIcon(R.drawable.mytaskstheme_ic_navigation_drawer);
+        if(toolbarEditTask != null) {
+            setSupportActionBar(toolbarEditTask);
         }
 
         // This prevent from having to tap twice to get the related onClick activity
@@ -175,7 +174,6 @@ public class EditTask extends ActionBarActivity implements DatePFragment.OnDateP
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         super.onCreateOptionsMenu(menu);
-        //toolbar_edit_task.inflateMenu(R.menu.menu_edit_task);
         getMenuInflater().inflate(R.menu.menu_add_task, menu);
 
         return true;

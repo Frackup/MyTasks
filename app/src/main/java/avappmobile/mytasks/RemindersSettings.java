@@ -5,13 +5,14 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
-import android.view.ContextMenu;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.Toast;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -27,21 +28,22 @@ import avappmobile.mytasks.Objects.Reminder;
  */
 public class RemindersSettings extends ActionBarActivity implements TimePFragment.OnTimePickedListener {
 
-    private static final int EDIT = 0;
-
     private DatabaseReminderHandler dbRemHandler;
 
     private int reminderhour;
     private int reminderminute;
     private int reminderduration;
 
-    private Spinner reminderSpinner;
     private ListView remindersListView;
     private List<Reminder> RemindersList = new ArrayList<Reminder>();
+    private Toolbar toolbarRemindersSettings;
+    private ImageButton editBtn;
+    private CheckBox disableChkBx;
 
     private ReminderListAdapter reminderAdapter;
     private int longClickedItemIndex;
     private int longClickedViewId;
+    private int reminderId;
     private Calendar cal;
 
     FragmentManager fm = getSupportFragmentManager();
@@ -61,19 +63,8 @@ public class RemindersSettings extends ActionBarActivity implements TimePFragmen
             }
         });
 
-        reminderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                updateRemindersList(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
         if(dbRemHandler.getActiveReminders() != 0) {
+            //RemindersList.addAll(dbRemHandler.getActiveListReminders());
             RemindersList.addAll(dbRemHandler.getActiveListReminders());
         }
 
@@ -92,87 +83,93 @@ public class RemindersSettings extends ActionBarActivity implements TimePFragmen
 
         // Association of displayed items
         remindersListView = (ListView) findViewById(R.id.listViewReminders);
-        reminderSpinner = (Spinner) findViewById(R.id.spinReminder);
+        toolbarRemindersSettings = (Toolbar) findViewById(R.id.toolbar_reminders_settings);
+        toolbarRemindersSettings.setNavigationIcon(R.drawable.mytaskstheme_ic_navigation_drawer);
+        if(toolbarRemindersSettings != null) {
+            setSupportActionBar(toolbarRemindersSettings);
+        }
 
         // Initialization of variables
         registerForContextMenu(remindersListView);
         cal = Calendar.getInstance();
-        reminderSpinner.setSelection(dbRemHandler.getActiveReminders()-1);
+        //reminderSpinner.setSelection(dbRemHandler.getActiveReminders()-1);
     }
 
-    // To define which reminders are displayed depending on the number selected with the spinner.
-    private void updateRemindersList(int number){
-        if(number == 0) {
-            // Inactivate the reminders 2 and 3
-            dbRemHandler.switchActivation("REMINDER_2", 0);
-            dbRemHandler.switchActivation("REMINDER_3", 0);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_reminders_settings, menu);
 
-            RemindersList.clear();
+        return true;
+    }
 
-            // Display the first reminder into the list
-            RemindersList.add(dbRemHandler.getReminder("REMINDER_1"));
-            reminderAdapter.notifyDataSetChanged();
-        } else if(number == 1) {
-            // Inactivate reminder 3 and activate reminder 2
-            dbRemHandler.switchActivation("REMINDER_3", 0);
-            dbRemHandler.switchActivation("REMINDER_2", 1);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
 
-            RemindersList.clear();
-
-            // Display the 2 first reminders into the list
-            RemindersList.add(dbRemHandler.getReminder("REMINDER_1"));
-            RemindersList.add(dbRemHandler.getReminder("REMINDER_2"));
-            reminderAdapter.notifyDataSetChanged();
-        } else if (number == 2) {
-            // Activate all reminders (remember that reminder 1 is always active, can't be inactivated)
-            dbRemHandler.switchActivation("REMINDER_3", 1);
-            dbRemHandler.switchActivation("REMINDER_2", 1);
-
-            RemindersList.clear();
-
-            // Display all the 3 reminders into the list
-            RemindersList.addAll(dbRemHandler.getAllReminders());
-            reminderAdapter.notifyDataSetChanged();
+        switch (id){
+            case R.id.action_settings:
+                Intent intent = new Intent(this, RemindersSettings.class);
+                startActivity(intent);
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
         }
+
+        return true;
+    }
+
+    public void disablingReminder(View view) {
+        disableChkBx = (CheckBox) view.findViewById(R.id.chkBxRem);
+        reminderId = (int) disableChkBx.getTag();
+        Reminder reminderSelected = dbRemHandler.getReminder(reminderId);
+
+        if (disableChkBx.isChecked()) {
+            reminderSelected.setActive(1);
+            dbRemHandler.updateReminder(reminderSelected);
+            // verify if the user enabled the third reminder while the second one is still inactive. Then activating it also.
+            if (reminderSelected.getDescription().equals("REMINDER_3")) {
+                Reminder reminderSelected2 = dbRemHandler.getReminder("REMINDER_2");
+                if(reminderSelected2.getActive() == 0) {
+                    reminderSelected2.setActive(1);
+                    dbRemHandler.updateReminder(reminderSelected2);
+                }
+            }
+        } else {
+            reminderSelected.setActive(0);
+            dbRemHandler.updateReminder(reminderSelected);
+            // verify if the user disabled the second reminder while the third one is still active. Then unactivating it also.
+            if(reminderSelected.getDescription().equals("REMINDER_2")) {
+                Reminder reminderSelected2 = dbRemHandler.getReminder("REMINDER_3");
+                if(reminderSelected2.getActive() == 1) {
+                    reminderSelected2.setActive(0);
+                    dbRemHandler.updateReminder(reminderSelected2);
+                }
+            }
+        }
+
+        RemindersList.clear();
+        RemindersList.addAll(dbRemHandler.getAllReminders());
+
+        populateRemindersList();
+
+
     }
 
     private void populateRemindersList() {
-        //reminderAdapter = new ReminderListAdapter();
         reminderAdapter = new ReminderListAdapter(this, R.layout.reminderlist_item, RemindersList);
         remindersListView.setAdapter(reminderAdapter);
     }
 
-    public void gotToHomePage(View view) {
-        Intent intent = new Intent(this,HomePage.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-    }
-
-    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, view, menuInfo);
-
-        menu.setHeaderIcon(R.drawable.edit_pencil_icon);
-        menu.setHeaderTitle(R.string.contextMenu_title);
-        menu.add(menu.NONE, EDIT, menu.NONE, R.string.contextMenu_edit);
-    }
-
-    public boolean onContextItemSelected (MenuItem item) {
-        switch (item.getItemId()) {
-            case EDIT:
-                if(longClickedItemIndex == 0) {
-                    Toast.makeText(getApplicationContext(), R.string.blocked_reminder, Toast.LENGTH_SHORT).show();
-                    break;
-                }
-                else
-                    showTimePickerDialog(longClickedViewId);
-
-                break;
-        }
-
-        return super.onContextItemSelected(item);
-    }
-
-    public void showTimePickerDialog(int layoutId) {
+    //public void showTimePickerDialog(int layoutId) {
+    public void reminderShowTimePickerDialog(View view) {
+        editBtn = (ImageButton) view.findViewById(R.id.imBtnEdit);
+        reminderId = (int)editBtn.getTag();
+        int layoutId = view.getId();
         Integer hour = cal.get(Calendar.HOUR);
         Integer minute = cal.get(Calendar.MINUTE);
 
@@ -199,7 +196,8 @@ public class RemindersSettings extends ActionBarActivity implements TimePFragmen
         reminderminute = minute;
         reminderduration = reminderminute + reminderhour*60;
 
-        Reminder reminderToEdit = (Reminder) remindersListView.getAdapter().getItem(longClickedItemIndex);
+        //Reminder reminderToEdit = (Reminder) remindersListView.getAdapter().getItem(reminderId);
+        Reminder reminderToEdit = dbRemHandler.getReminder(reminderId);
         reminderToEdit.setDuration(reminderduration);
         reminderToEdit.setHour(reminderhour);
         reminderToEdit.setMinute(reminderminute);

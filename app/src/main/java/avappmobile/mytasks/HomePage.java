@@ -36,15 +36,19 @@ public class HomePage extends ActionBarActivity {
     private DatabaseAdapter dbAdapter;
     private DatabaseTaskHandler dbHandler;
     private DatabaseReminderHandler dbRemHandler;
-    ListView taskListView;
+    ListView listViewDayTasks;
+    ListView listViewNextTasks;
+    ListView tempListView;
     ArrayAdapter<Task> taskAdapter;
-    private Toolbar toolbar_home_page;
+    private Toolbar toolbarHomePage;
 
     private boolean loaded = false;
 
     int longClickedItemIndex;
 
-    List<Task> Tasks = new ArrayList<Task>();
+    List<Task> DayTasks = new ArrayList<Task>();
+    List<Task> NextTasks = new ArrayList<Task>();
+    List<Task> TempList = new ArrayList<Task>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,18 +59,34 @@ public class HomePage extends ActionBarActivity {
         // The following piece of code allows to empty database before testing when reinstalling the app for test.
         //getApplicationContext().deleteDatabase("myTasks");
 
-        taskListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        listViewDayTasks.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 longClickedItemIndex = position;
+                tempListView = listViewDayTasks;
                 return false;
             }
         });
 
-        if (dbHandler.getTasksCount() != 0)
-            Tasks.addAll(dbHandler.getAllTasks());
+        listViewNextTasks.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                longClickedItemIndex = position;
+                tempListView = listViewNextTasks;
+                return false;
+            }
+        });
 
-        populateTasksList();
+        if(dbHandler.getDayTasks() != null)
+            DayTasks.addAll(dbHandler.getDayTasks());
+
+        populateTasksList(listViewDayTasks, DayTasks);
+
+        if(dbHandler.getNextTasks() != null)
+            NextTasks.addAll(dbHandler.getNextTasks());
+
+        populateTasksList(listViewNextTasks, NextTasks);
+
         loaded = true;
     }
 
@@ -89,13 +109,15 @@ public class HomePage extends ActionBarActivity {
         }
         dbRemHandler.initReminders();
 
-        toolbar_home_page = (Toolbar) findViewById(R.id.toolbar_home_page);
-        toolbar_home_page.setTitle("My Tasks");
-        if (toolbar_home_page != null) {
-            setSupportActionBar(toolbar_home_page);
+        toolbarHomePage = (Toolbar) findViewById(R.id.toolbar_home_page);
+        toolbarHomePage.setTitle("My Tasks");
+        if (toolbarHomePage != null) {
+            setSupportActionBar(toolbarHomePage);
         }
-        taskListView = (ListView) findViewById(R.id.listViewTasksDay);
-        registerForContextMenu(taskListView);
+        listViewDayTasks = (ListView) findViewById(R.id.listViewTasksDay);
+        listViewNextTasks = (ListView) findViewById(R.id.listViewTasksNext);
+        registerForContextMenu(listViewDayTasks);
+        registerForContextMenu(listViewNextTasks);
 
     }
 
@@ -103,7 +125,6 @@ public class HomePage extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        //toolbar_home_page.inflateMenu(R.menu.menu_home_page);
         getMenuInflater().inflate(R.menu.menu_home_page, menu);
         return true;
     }
@@ -130,10 +151,10 @@ public class HomePage extends ActionBarActivity {
         return true;
     }
 
-    private void populateTasksList() {
+    private void populateTasksList(ListView lv, List<Task> listTasks) {
         //taskAdapter = new TaskListAdapter();
-        taskAdapter = new TaskListAdapter(this, R.layout.tasklist_item, Tasks);
-        taskListView.setAdapter(taskAdapter);
+        taskAdapter = new TaskListAdapter(this, R.layout.tasklist_item, listTasks);
+        lv.setAdapter(taskAdapter);
     }
 
     public void goToAddTask(View view){
@@ -145,19 +166,32 @@ public class HomePage extends ActionBarActivity {
         super.onResume();
 
         if (!loaded) {
+/* Old part (working)
             if (dbHandler.getTasksCount() != 0) {
-                Tasks.clear();
-                Tasks.addAll(dbHandler.getAllTasks());
+                DayTasks.clear();
+                DayTasks.addAll(dbHandler.getAllTasks());
             }
 
             populateTasksList();
+*/
+            if(dbHandler.getDayTasks() != null) {
+                DayTasks.clear();
+                DayTasks.addAll(dbHandler.getDayTasks());
+            }
+            populateTasksList(listViewDayTasks, DayTasks);
+
+            if(dbHandler.getNextTasks() != null) {
+                NextTasks.clear();
+                NextTasks.addAll(dbHandler.getNextTasks());
+            }
+            populateTasksList(listViewNextTasks, NextTasks);
         }
 
         loaded = false;
     }
 
     public void editTask() {
-        Task taskToEdit = (Task) taskListView.getAdapter().getItem(longClickedItemIndex);
+        Task taskToEdit = (Task) tempListView.getAdapter().getItem(longClickedItemIndex);
         int taskId = taskToEdit.getId();
 
         Intent intent = new Intent(this, EditTask.class);
@@ -198,13 +232,14 @@ public class HomePage extends ActionBarActivity {
                 .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
-                        Task taskToDelete = (Task) taskListView.getAdapter().getItem(longClickedItemIndex);
+                        Task taskToDelete = (Task) tempListView.getAdapter().getItem(longClickedItemIndex);
 
                         // Removing the task from the database and from the calendar
                         dbHandler.deleteTask(taskToDelete, context);
 
                         // Removing the task from the listView
-                        TaskListAdapter tAdapter = (TaskListAdapter) taskListView.getAdapter();
+
+                        TaskListAdapter tAdapter = (TaskListAdapter) tempListView.getAdapter();
                         tAdapter.remove(tAdapter.getItem(longClickedItemIndex));
                         tAdapter.notifyDataSetChanged();
 

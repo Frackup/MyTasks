@@ -9,8 +9,8 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/reminders_description"
         android:id="@+id/txtReminderDesc"
-        android:layout_marginTop="0dp"
-        android:layout_marginLeft="0dp" />
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -18,7 +18,8 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/duration"
         android:id="@+id/txtDuration"
-        android:layout_below="@+id/txtReminderDesc" />
+        android:layout_below="@+id/txtReminderDesc"
+        android:layout_marginLeft="5dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -60,15 +61,28 @@
         android:layout_below="@+id/txtReminderDesc"
         android:layout_toRightOf="@+id/txtRemMin" />
 
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/chkBxRem"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/txtReminderDesc"
+        android:layout_marginRight="5dp"
+        android:layout_alignBottom="@+id/txtDuration"
+        android:onClick="disablingReminder" />
+
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageButton"
-        android:layout_gravity="right"
-        android:layout_marginRight="5dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignBottom="@+id/txtMinute"
-        android:src="@drawable/ic_delete_black_48dp" />
+        android:id="@+id/imBtnEdit"
+        android:layout_alignParentBottom="false"
+        android:background="@android:color/transparent"
+        android:layout_toStartOf="@+id/chkBxRem"
+        android:layout_alignTop="@+id/txtReminderDesc"
+        android:layout_alignBottom="@+id/txtDuration"
+        android:src="@drawable/ic_create_black_24dp"
+        android:layout_marginRight="10dp"
+        android:onClick="reminderShowTimePickerDialog" />
 
 </RelativeLayout>

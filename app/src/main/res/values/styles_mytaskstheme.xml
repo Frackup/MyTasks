@@ -3,13 +3,17 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
-        <item name="android:background">#808080</item>
-        <item name="android:titleTextStyle">@style/MyActionBar.TitleTextStyle</item>
+    <!--style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar"-->
+    <style name="MyActionBarTheme" parent="@style/Theme.AppCompat.NoActionBar">
+        <item name="android:background">@color/mt_toolbar_background_color</item>
+        <item name="android:textColorPrimary">@color/mt_title_toolbar_color</item>
+        <item name="colorPrimaryDark">@color/mt_title_toolbar_color</item>
     </style>
 
-    <style name="MyActionBar.TitleTextStyle" parent="android:TextAppearance.Holo.Widget.ActionBar.Title" >
-        <item name="android:textColor">#fffa6d12</item>
+    <style name="MyActionBarPopUpTheme" parent="@style/Theme.AppCompat.NoActionBar">
+        <item name="android:background">@color/mt_toolbar_background_color</item>
+        <item name="actionMenuTextColor">@color/mt_actionbar_color</item>
+        <!--item name="android:textColorSecondary">@color/mt_title_toolbar_color</item-->
     </style>
 
     <style name="ButtonMyTasksTheme" parent="android:Widget.Holo.Light.Button">
