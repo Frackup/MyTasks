@@ -10,4 +10,8 @@
 
     <color name="mt_textview_color">#ff8800</color>
     <color name="mt_texthighlight_color">#99ff8800</color>
+
+    <!-- REMINDERS LIST -->
+    <color name="mt_reminderBckgrnd_color">#c2c2c2</color>
+    <color name="mt_reminderBckgrnd_transparent">#00000000</color>
 </resources>

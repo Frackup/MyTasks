@@ -65,7 +65,7 @@ public class RemindersSettings extends ActionBarActivity implements TimePFragmen
 
         if(dbRemHandler.getActiveReminders() != 0) {
             //RemindersList.addAll(dbRemHandler.getActiveListReminders());
-            RemindersList.addAll(dbRemHandler.getActiveListReminders());
+            RemindersList.addAll(dbRemHandler.getAllReminders());
         }
 
         populateRemindersList();
@@ -206,7 +206,7 @@ public class RemindersSettings extends ActionBarActivity implements TimePFragmen
         dbRemHandler.updateReminder(reminderToEdit);
 
         RemindersList.clear();
-        RemindersList.addAll(dbRemHandler.getActiveListReminders());
+        RemindersList.addAll(dbRemHandler.getAllReminders());
 
         populateRemindersList();
     }

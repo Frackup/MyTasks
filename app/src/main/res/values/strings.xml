@@ -68,7 +68,8 @@
     <string name="reminders_description">Reminders Description</string>
     <string name="reminders_minute">M</string>
     <string name="reminders_hour">H</string>
-    <string name="duration">Duration : </string>
+    <string name="start">Starts </string>
+    <string name="reminderTxt">before task</string>
     <string name="reminders_min_text"> Min</string>
     <string name="reminders_hr_text"> Hr</string>
     <string name="reminders_number">Number of reminder(s) :</string>
@@ -79,5 +80,8 @@
         <item>2</item>
         <item>3</item>
     </string-array>
+    <string name="firstRem">First Reminder</string>
+    <string name="secondRem">Second Reminder</string>
+    <string name="thirdRem">third Reminder</string>
 
 </resources>

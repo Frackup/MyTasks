@@ -32,6 +32,7 @@ public class DatabaseTaskHandler {
     private static final String TIME = "time";
     private static final String EVENT_ID = "eventid";
     private static final String FREQUENCY = "frequency";
+    private String[] ALL_COLUMNS = new String[] { ID, TITLE, YEAR, MONTH, DAY, HOUR, MINUTE, DATE, TIME, EVENT_ID, FREQUENCY };
 
     private DatabaseHelper mDbHelper;
     private SQLiteDatabase mDb;
@@ -169,8 +170,8 @@ public class DatabaseTaskHandler {
         int month = calDate.get(Calendar.MONTH);
         int year = calDate.get(Calendar.YEAR);
 
-        Cursor cursor = mDb.query(DATABASE_TABLE, new String[] { ID, TITLE, YEAR, MONTH, DAY, HOUR, MINUTE, DATE, TIME, EVENT_ID, FREQUENCY },
-                DAY + "=?" + " AND " + MONTH + "=?" + " AND " + YEAR + "=?",
+        Cursor cursor = mDb.query(DATABASE_TABLE, ALL_COLUMNS,
+                DAY + "=? AND " + MONTH + "=? AND " + YEAR + "=? ORDER BY YEAR, MONTH, DAY, HOUR, MINUTE",
                 new String[] { String.valueOf(day), String.valueOf(month), String.valueOf(year) },
                 null, null, null, null );
 
@@ -194,9 +195,11 @@ public class DatabaseTaskHandler {
         int month = calDate.get(Calendar.MONTH);
         int year = calDate.get(Calendar.YEAR);
 
-        Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE MONTH = " + month + " AND YEAR = " + year + " AND DAY > " + day +
-                " UNION ALL SELECT * FROM " + DATABASE_TABLE + " WHERE MONTH > " + month + " AND YEAR = " + year +
-                " UNION ALL SELECT * FROM " + DATABASE_TABLE + " WHERE YEAR > " + year
+        Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE ID IN " +
+                "(SELECT " + ID + " FROM " + DATABASE_TABLE + " WHERE " + MONTH + " = " + month + " AND " + YEAR + " = " + year + " AND " + DAY + " > " + day +
+                " UNION ALL SELECT " + ID + " FROM " + DATABASE_TABLE + " WHERE " + MONTH + " > " + month + " AND " + YEAR + " = " + year +
+                " UNION ALL SELECT " + ID + " FROM " + DATABASE_TABLE + " WHERE " + YEAR + " > " + year +
+                " ) ORDER BY " + YEAR + ", " + MONTH + ", " + DAY + ", " + HOUR + ", " + MINUTE
                 , null);
 
         if (cursor.moveToFirst()) {
