@@ -20,6 +20,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import avappmobile.mytasks.Adapters.SwipeDetector;
 import avappmobile.mytasks.Adapters.TaskListAdapter;
 import avappmobile.mytasks.DBHandlers.DatabaseAdapter;
 import avappmobile.mytasks.DBHandlers.DatabaseReminderHandler;
@@ -43,12 +44,12 @@ public class HomePage extends ActionBarActivity {
     private Toolbar toolbarHomePage;
 
     private boolean loaded = false;
+    private SwipeDetector swipeDetector;
 
     int longClickedItemIndex;
 
     List<Task> DayTasks = new ArrayList<Task>();
     List<Task> NextTasks = new ArrayList<Task>();
-    List<Task> TempList = new ArrayList<Task>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +69,20 @@ public class HomePage extends ActionBarActivity {
             }
         });
 
+        listViewNextTasks.setOnTouchListener(swipeDetector);
+        listViewNextTasks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(swipeDetector.swipeDetected()) {
+                    if(swipeDetector.getAction() == SwipeDetector.Action.RL) {
+                        Toast.makeText(getApplicationContext(), "item swiped from R to L", Toast.LENGTH_SHORT).show();
+                    } else if(swipeDetector.getAction() == SwipeDetector.Action.LR) {
+                        Toast.makeText(getApplicationContext(), "item swiped from L to R", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+/*
         listViewNextTasks.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -76,7 +91,7 @@ public class HomePage extends ActionBarActivity {
                 return false;
             }
         });
-
+*/
         if(dbHandler.getDayTasks() != null)
             DayTasks.addAll(dbHandler.getDayTasks());
 
@@ -118,7 +133,7 @@ public class HomePage extends ActionBarActivity {
         listViewNextTasks = (ListView) findViewById(R.id.listViewTasksNext);
         registerForContextMenu(listViewDayTasks);
         registerForContextMenu(listViewNextTasks);
-
+        swipeDetector = new SwipeDetector();
     }
 
 
